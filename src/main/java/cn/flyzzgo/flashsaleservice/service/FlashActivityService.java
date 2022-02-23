@@ -21,4 +21,11 @@ public interface FlashActivityService {
      * @return
      */
     public Response modifyFlashActivity(FlashActivityDto flashActivityDto);
+
+    /**
+     * 获取指定活动
+     * @param id
+     * @return
+     */
+    public Response getFlashActivityById(Long id);
 }

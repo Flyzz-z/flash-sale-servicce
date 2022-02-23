@@ -6,7 +6,7 @@ import lombok.Data;
  * @author Flyzz
  */
 @Data
-public class FlashOrderCmd {
+public class PlaceOrderCmd {
 
     /**
      * 订单ID

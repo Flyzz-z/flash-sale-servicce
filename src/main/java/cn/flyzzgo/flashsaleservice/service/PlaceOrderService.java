@@ -1,2 +1,9 @@
-package cn.flyzzgo.flashsaleservice.service;public interface PlaceOrderService {
+package cn.flyzzgo.flashsaleservice.service;
+
+/**
+ * @author Flyzz
+ */
+public interface PlaceOrderService {
+
+
 }
