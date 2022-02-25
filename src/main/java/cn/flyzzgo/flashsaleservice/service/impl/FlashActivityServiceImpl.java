@@ -1,5 +1,6 @@
 package cn.flyzzgo.flashsaleservice.service.impl;
 
+import cn.flyzzgo.flashsaleservice.constant.enums.ErrorCode;
 import cn.flyzzgo.flashsaleservice.mapper.FlashActivityMapper;
 import cn.flyzzgo.flashsaleservice.model.convertor.FlashActivityConvertor;
 import cn.flyzzgo.flashsaleservice.model.dto.FlashActivityDto;
@@ -47,9 +48,14 @@ public class FlashActivityServiceImpl implements FlashActivityService {
         log.info("查询秒杀活动 id={}",id);
         FlashActivityDo flashActivityDo = flashActivityMapper.selectById(id);
         if(flashActivityDo == null) {
-            // TODO: 2022/2/17 抛出异常
+            return Response.buildFailure(ErrorCode.CLIENT_ERROR);
         }
         FlashActivityDto flashActivityDto = FlashActivityConvertor.flashActivityDoToDto(flashActivityDo);
         return SingleResponse.of(flashActivityDto);
+    }
+
+    @Override
+    public boolean isAllowPlaceOrder(Long id) {
+        return true;
     }
 }

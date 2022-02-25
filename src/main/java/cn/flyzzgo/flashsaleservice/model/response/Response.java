@@ -1,5 +1,6 @@
 package cn.flyzzgo.flashsaleservice.model.response;
 
+import cn.flyzzgo.flashsaleservice.constant.enums.ErrorCode;
 import lombok.Data;
 
 /**
@@ -26,11 +27,11 @@ public class Response {
         return response;
     }
 
-//    public static Response buildFailure(ErrorCode errorCode) {
-//        Response response = new Response();
-//        response.setSuccess(false);
-//        response.setErrCode(errorCode.getErrCode());
-//        response.setErrMessage(errorCode.getErrMessage());
-//        return response;
-//    }
+    public static Response buildFailure(ErrorCode errorCode) {
+        Response response = new Response();
+        response.setSuccess(false);
+        response.setErrCode(errorCode.getErrCode());
+        response.setErrMessage(errorCode.getErrMsg());
+        return response;
+    }
 }

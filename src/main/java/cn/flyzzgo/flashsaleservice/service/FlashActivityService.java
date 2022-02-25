@@ -28,4 +28,6 @@ public interface FlashActivityService {
      * @return
      */
     public Response getFlashActivityById(Long id);
+
+    public boolean isAllowPlaceOrder(Long id);
 }

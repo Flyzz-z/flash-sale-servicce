@@ -10,11 +10,17 @@ public interface FlashItemService {
 
     Response publishFlashItem(FlashItemDto flashItemDto);
 
-    Response onlineFlashItem(Long id);
+    Response onlineFlashItem(Long itemId);
 
-    Response offlineFlashItem(Long id);
+    Response offlineFlashItem(Long itemId);
 
-    Response getFlashItemById(Long id);
+    Response getFlashItemById(Long itemId);
 
-    Response getFlashItemsByActvityId(Long id);
+    Response getFlashItemsByActvityId(Long itemId);
+
+    boolean decreaseItemStock(Long itemId,Integer quantity);
+
+    boolean increaseItemStock(Long itemId,Integer quantity);
+
+    boolean isAllowPlaceOrder(Long itemId);
 }

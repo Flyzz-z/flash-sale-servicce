@@ -1,5 +1,6 @@
 package cn.flyzzgo.flashsaleservice.service;
 
+import cn.flyzzgo.flashsaleservice.model.dto.FlashOrderDto;
 import cn.flyzzgo.flashsaleservice.model.dto.PlaceOrderCmd;
 import cn.flyzzgo.flashsaleservice.model.response.Response;
 
@@ -8,7 +9,9 @@ import cn.flyzzgo.flashsaleservice.model.response.Response;
  */
 public interface FlashOrderService {
 
-    Response placeOrder(PlaceOrderCmd placeOrderCmd);
+    Response placeOrder(Long userId,PlaceOrderCmd placeOrderCmd) throws InterruptedException;
 
     Response cancelOrder();
+
+    boolean saveFlashOrder(FlashOrderDto flashOrderDto);
 }

@@ -62,4 +62,5 @@ public class FlashItemDto {
      * 库存是否已经预热
      */
     private Integer stockWarmUp;
+
 }
