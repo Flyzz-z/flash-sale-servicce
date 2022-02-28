@@ -23,7 +23,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(value = Exception.class)
-    public Response ExceptionHandler(HttpServletRequest httpServletRequest, Exception e) {
+    public Response exceptionHandler(HttpServletRequest httpServletRequest, Exception e) {
         log.info(e.getMessage());
         return Response.buildFailure(ErrorCode.SERVER_ERROR);
     }
