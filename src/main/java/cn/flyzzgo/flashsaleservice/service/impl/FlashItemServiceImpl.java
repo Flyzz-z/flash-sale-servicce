@@ -12,15 +12,27 @@ import cn.flyzzgo.flashsaleservice.model.response.SingleResponse;
 import cn.flyzzgo.flashsaleservice.service.FlashItemService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import lombok.extern.slf4j.Slf4j;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 /**
  * @author Flyzz
  */
 @Service
+@Slf4j
+@CacheConfig(cacheNames = "FlashItem")
 public class FlashItemServiceImpl implements FlashItemService {
 
     @Resource
@@ -28,28 +40,37 @@ public class FlashItemServiceImpl implements FlashItemService {
 
     @Override
     public Response publishFlashItem(FlashItemDto flashItemDto) {
+        log.info("发布秒杀品{}", flashItemDto);
+        flashItemDto.setStatus(FlashItemStatus.PUBLISHED.getCode());
+        flashItemDto.setStockWarmUp(0);
         FlashItemDo flashItemDo = FlashItemConvertor.flashItemDtoToDo(flashItemDto);
         flashItemMapper.insert(flashItemDo);
+        log.info("发布秒杀品成功id{}", flashItemDo.getId());
         return Response.buildSuccess();
     }
 
     @Override
+    @CacheEvict(key = "'FlashItemCache'.concat(#itemId)")
     public Response onlineFlashItem(Long itemId) {
+        log.info("上线秒杀品id{}", itemId);
         FlashItemDo flashItemDo = flashItemMapper.selectById(itemId);
         if (flashItemDo == null) {
             return Response.buildFailure(ErrorCode.CLIENT_ERROR);
         }
 
-        if (!flashItemDo.getStatus().equals(FlashItemStatus.PUBLISHED.getCode())) {
-            return Response.buildFailure(ErrorCode.CLIENT_ERROR);
+        if (flashItemDo.getStatus().equals(FlashItemStatus.ONLINE.getCode())) {
+            return Response.buildSuccess();
         }
         flashItemDo.setStatus(FlashItemStatus.ONLINE.getCode());
         flashItemMapper.updateById(flashItemDo);
+        log.info("上线秒杀品成功id{}", itemId);
         return Response.buildSuccess();
     }
 
     @Override
+    @CacheEvict(key = "'FlashItemCache'.concat(#itemId)")
     public Response offlineFlashItem(Long itemId) {
+        log.info("下线秒杀品id{}", itemId);
         FlashItemDo flashItemDo = flashItemMapper.selectById(itemId);
         if (flashItemDo == null) {
             return Response.buildFailure(ErrorCode.CLIENT_ERROR);
@@ -60,27 +81,52 @@ public class FlashItemServiceImpl implements FlashItemService {
         }
         flashItemDo.setStatus(FlashItemStatus.OFFLINE.getCode());
         flashItemMapper.updateById(flashItemDo);
+        log.info("下线秒杀品成功id{}", itemId);
         return Response.buildSuccess();
     }
 
     @Override
+    @Cacheable(key = "'FlashItemCache'.concat(#itemId)")
     public Response getFlashItemById(Long itemId) {
 
         FlashItemDo flashItemDo = flashItemMapper.selectById(itemId);
         if (flashItemDo == null) {
             return Response.buildFailure(ErrorCode.CLIENT_ERROR);
         }
-        return SingleResponse.of(flashItemDo);
+        FlashItemDto flashItemDto = FlashItemConvertor.flashItemDoToDto(flashItemDo);
+        return SingleResponse.of(flashItemDto);
     }
 
     @Override
-    public Response getFlashItemsByActvityId(Long itemId) {
+    @Cacheable(key = "'ActivityFlashItemCache'.concat(#activityId)")
+    public Response getFlashItemsByActivityId(Long activityId) {
 
         QueryWrapper<FlashItemDo> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().eq(FlashItemDo::getActivityId, itemId);
+        queryWrapper.lambda().eq(FlashItemDo::getActivityId, activityId);
         List<FlashItemDo> flashItemDoList = flashItemMapper.selectList(queryWrapper);
-        return MultiResponse.of(flashItemDoList);
+        List<FlashItemDto> flashItemDtoList = flashItemDoList.stream().map(FlashItemConvertor::flashItemDoToDto).collect(Collectors.toList());
+        return MultiResponse.of(flashItemDtoList);
     }
+
+    @Override
+    @CacheEvict(key = "'FlashItemCache'.concat(#flashItemDto.id)")
+    public Response modifyFlashItem(FlashItemDto flashItemDto) {
+        FlashItemDo flashItemDo = FlashItemConvertor.flashItemDtoToDo(flashItemDto);
+        flashItemMapper.updateById(flashItemDo);
+        return Response.buildSuccess();
+    }
+
+    @Override
+    public Response getNotWarmUpItemList(Long size) {
+        QueryWrapper<FlashItemDo> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().eq(FlashItemDo::getStockWarmUp, 0)
+                .eq(FlashItemDo::getStatus,FlashItemStatus.ONLINE.getCode())
+                .last(String.format("limit %d", size));
+        List<FlashItemDo> flashItemDoList = flashItemMapper.selectList(queryWrapper);
+        List<FlashItemDto> flashItemDtoList = flashItemDoList.stream().map(FlashItemConvertor::flashItemDoToDto).collect(Collectors.toList());
+        return SingleResponse.of(flashItemDtoList);
+    }
+
 
     @Override
     public boolean isAllowPlaceOrder(Long itemId) {
@@ -88,6 +134,7 @@ public class FlashItemServiceImpl implements FlashItemService {
     }
 
     @Override
+    @CacheEvict(key = "'FlashItemCache'.concat(#itemId)")
     public boolean decreaseItemStock(Long itemId, Integer quantity) {
         return flashItemMapper.decreaseItemStock(itemId, quantity) == 1;
     }
@@ -96,4 +143,6 @@ public class FlashItemServiceImpl implements FlashItemService {
     public boolean increaseItemStock(Long itemId, Integer quantity) {
         return flashItemMapper.increaseItemStock(itemId, quantity) == 1;
     }
+
+
 }

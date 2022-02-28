@@ -3,6 +3,7 @@ package cn.flyzzgo.flashsaleservice.config;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator;
 import org.springframework.cache.CacheManager;
@@ -14,6 +15,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.RedisSerializer;
@@ -42,6 +44,7 @@ public class RedisCacheConfig {
                 LaissezFaireSubTypeValidator.instance,
                 ObjectMapper.DefaultTyping.NON_FINAL,
                 JsonTypeInfo.As.WRAPPER_ARRAY);
+        om.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
         jackson2JsonRedisSerializer.setObjectMapper(om);
 
@@ -57,25 +60,23 @@ public class RedisCacheConfig {
                 .build();
     }
 
-    /**
-     * 生成Key规则
-     *
-     * @return
-     */
-    @Bean
-    public KeyGenerator cacheKey() {
-        return new KeyGenerator() {
 
-            @Override
-            public Object generate(Object target, Method method, Object... params) {
-                String sb = target.getClass().getName() +
-                        "." + method.getName();
-                if (params.length == 0 || params[0] == null) {
-                    return null;
-                }
-                String join = String.join("&", Arrays.stream(params).map(Object::toString).collect(Collectors.toList()));
-                return String.format("%s{%s}", sb, join);
-            }
-        };
+    @Bean
+    public RedisTemplate<String,Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
+
+        RedisTemplate<String,Object> redisTemplate = new RedisTemplate<>();
+        redisTemplate.setConnectionFactory(redisConnectionFactory);
+
+        Jackson2JsonRedisSerializer jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer(Object.class);
+        StringRedisSerializer stringRedisSerializer = new StringRedisSerializer();
+        // key-value结构序列化数据结构
+        redisTemplate.setKeySerializer(stringRedisSerializer);
+        redisTemplate.setValueSerializer(jackson2JsonRedisSerializer);
+        // hash数据结构序列化方式,必须这样否则存hash 就是基于jdk序列化的
+        redisTemplate.setHashKeySerializer(stringRedisSerializer);
+        redisTemplate.setHashValueSerializer(jackson2JsonRedisSerializer);
+        redisTemplate.afterPropertiesSet();
+        return redisTemplate;
     }
+
 }

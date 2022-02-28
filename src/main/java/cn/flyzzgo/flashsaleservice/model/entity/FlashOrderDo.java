@@ -18,7 +18,7 @@ public class FlashOrderDo {
     /**
      * 订单ID
      */
-    @TableId(value = "id",type = IdType.AUTO)
+    @TableId(value = "id", type = IdType.INPUT)
     private Long id;
 
     /**

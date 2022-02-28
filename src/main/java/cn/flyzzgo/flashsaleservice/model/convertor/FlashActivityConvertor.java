@@ -15,11 +15,7 @@ public class FlashActivityConvertor {
         FlashActivityDto flashActivityDto = new FlashActivityDto();
         BeanUtils.copyProperties(flashActivityDo, flashActivityDto);
         Date now = new Date();
-        if (now.compareTo(flashActivityDo.getStartTime()) > 0 && now.compareTo(flashActivityDto.getEndTime()) < 0) {
-            flashActivityDto.setInProcess(true);
-        } else {
-            flashActivityDto.setInProcess(false);
-        }
+        flashActivityDto.setInProcess(now.compareTo(flashActivityDo.getStartTime()) > 0 && now.compareTo(flashActivityDto.getEndTime()) < 0);
         return flashActivityDto;
     }
 

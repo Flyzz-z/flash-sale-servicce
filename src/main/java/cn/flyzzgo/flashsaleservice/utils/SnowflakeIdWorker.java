@@ -6,8 +6,8 @@ package cn.flyzzgo.flashsaleservice.utils;
 public class SnowflakeIdWorker {
 
     //下面两个每个5位，加起来就是10位的工作机器id
-    private long workerId;    //工作id
-    private long datacenterId;   //数据id
+    private final long workerId;    //工作id
+    private final long datacenterId;   //数据id
     //12位的序列号
     private long sequence;
 
@@ -28,25 +28,25 @@ public class SnowflakeIdWorker {
     }
 
     //初始时间戳
-    private long twepoch = 1288834974657L;
+    private final long twepoch = 1288834974657L;
 
     //长度为5位
-    private long workerIdBits = 5L;
-    private long datacenterIdBits = 5L;
+    private final long workerIdBits = 5L;
+    private final long datacenterIdBits = 5L;
     //最大值
-    private long maxWorkerId = -1L ^ (-1L << workerIdBits);
-    private long maxDatacenterId = -1L ^ (-1L << datacenterIdBits);
+    private final long maxWorkerId = -1L ^ (-1L << workerIdBits);
+    private final long maxDatacenterId = -1L ^ (-1L << datacenterIdBits);
     //序列号id长度
-    private long sequenceBits = 12L;
+    private final long sequenceBits = 12L;
     //序列号最大值
-    private long sequenceMask = -1L ^ (-1L << sequenceBits);
+    private final long sequenceMask = -1L ^ (-1L << sequenceBits);
 
     //工作id需要左移的位数，12位
-    private long workerIdShift = sequenceBits;
+    private final long workerIdShift = sequenceBits;
     //数据id需要左移位数 12+5=17位
-    private long datacenterIdShift = sequenceBits + workerIdBits;
+    private final long datacenterIdShift = sequenceBits + workerIdBits;
     //时间戳需要左移位数 12+5+5=22位
-    private long timestampLeftShift = sequenceBits + workerIdBits + datacenterIdBits;
+    private final long timestampLeftShift = sequenceBits + workerIdBits + datacenterIdBits;
 
     //上次时间戳，初始值为负数
     private long lastTimestamp = -1L;

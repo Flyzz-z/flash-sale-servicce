@@ -1,7 +1,7 @@
 package cn.flyzzgo.flashsaleservice.model.dto;
 
 import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.util.StringUtils;
 
 import java.util.Date;
 
@@ -42,4 +42,9 @@ public class FlashActivityDto {
     private String activityDesc;
 
     private Boolean inProcess;
+
+    public boolean checkValid() {
+        return !StringUtils.hasText(activityName) || startTime == null || endTime == null ||
+                !StringUtils.hasText(activityDesc);
+    }
 }

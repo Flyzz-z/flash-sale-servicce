@@ -12,13 +12,13 @@ public class FlashOrderConvertor {
 
     public static FlashOrderDto flashOrderDoToFlashOrderDto(FlashOrderDo flashOrderDo) {
         FlashOrderDto flashOrderDto = new FlashOrderDto();
-        BeanUtils.copyProperties(flashOrderDo,flashOrderDto);
+        BeanUtils.copyProperties(flashOrderDo, flashOrderDto);
         return flashOrderDto;
     }
 
     public static FlashOrderDo flashOrderDtoToFlashOrderDo(FlashOrderDto flashOrderDto) {
         FlashOrderDo flashOrderDo = new FlashOrderDo();
-        BeanUtils.copyProperties(flashOrderDto,flashOrderDo);
+        BeanUtils.copyProperties(flashOrderDto, flashOrderDo);
         return flashOrderDo;
     }
 }

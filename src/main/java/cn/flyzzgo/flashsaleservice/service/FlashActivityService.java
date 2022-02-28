@@ -10,24 +10,31 @@ public interface FlashActivityService {
 
     /**
      * 发布秒杀活动
+     *
      * @param flashActivityDto
      * @return
      */
-    public Response publishFlashActivity(FlashActivityDto flashActivityDto);
+    Response publishFlashActivity(FlashActivityDto flashActivityDto);
 
     /**
      * 修改秒杀活动
+     *
      * @param flashActivityDto
      * @return
      */
-    public Response modifyFlashActivity(FlashActivityDto flashActivityDto);
+    Response modifyFlashActivity(FlashActivityDto flashActivityDto);
 
     /**
      * 获取指定活动
-     * @param id
+     *
+     * @param
      * @return
      */
-    public Response getFlashActivityById(Long id);
+    Response getFlashActivityById(Long activityId);
 
-    public boolean isAllowPlaceOrder(Long id);
+    Response onlineFlashActivity(Long activityId);
+
+    Response offlineFlashActivity(Long activityId);
+
+    boolean isAllowPlaceOrder(Long id);
 }

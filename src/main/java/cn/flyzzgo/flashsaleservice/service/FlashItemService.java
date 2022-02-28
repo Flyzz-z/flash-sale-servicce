@@ -16,11 +16,16 @@ public interface FlashItemService {
 
     Response getFlashItemById(Long itemId);
 
-    Response getFlashItemsByActvityId(Long itemId);
+    Response getFlashItemsByActivityId(Long itemId);
 
-    boolean decreaseItemStock(Long itemId,Integer quantity);
+    Response modifyFlashItem(FlashItemDto flashItemDto);
 
-    boolean increaseItemStock(Long itemId,Integer quantity);
+    Response getNotWarmUpItemList(Long size);
+
+    boolean decreaseItemStock(Long itemId, Integer quantity);
+
+    boolean increaseItemStock(Long itemId, Integer quantity);
 
     boolean isAllowPlaceOrder(Long itemId);
+
 }

@@ -5,7 +5,7 @@ import lombok.Data;
 /**
  * @author Flyzz
  */
-public class SingleResponse<T> extends Response{
+public class SingleResponse<T> extends Response {
 
     private T data;
 

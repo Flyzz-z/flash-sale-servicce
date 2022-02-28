@@ -11,13 +11,13 @@ public class FlashItemConvertor {
 
     public static FlashItemDo flashItemDtoToDo(FlashItemDto flashItemDto) {
         FlashItemDo flashItemDo = new FlashItemDo();
-        BeanUtils.copyProperties(flashItemDto,flashItemDo);
+        BeanUtils.copyProperties(flashItemDto, flashItemDo);
         return flashItemDo;
     }
 
-    public static FlashItemDto flashItemDtoToDo(FlashItemDo flashItemDo) {
+    public static FlashItemDto flashItemDoToDto(FlashItemDo flashItemDo) {
         FlashItemDto flashItemDto = new FlashItemDto();
-        BeanUtils.copyProperties(flashItemDo,flashItemDto);
+        BeanUtils.copyProperties(flashItemDo, flashItemDto);
         return flashItemDto;
     }
 }

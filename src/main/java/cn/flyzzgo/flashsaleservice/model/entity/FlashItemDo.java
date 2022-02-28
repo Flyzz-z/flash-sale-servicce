@@ -18,7 +18,7 @@ public class FlashItemDo {
     /**
      * 秒杀品ID
      */
-    @TableId(value = "id",type = IdType.AUTO)
+    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
     /**
      * 秒杀活动ID

@@ -8,14 +8,14 @@ import java.util.List;
 /**
  * @author Flyzz
  */
-public class MultiResponse<T> extends Response{
+public class MultiResponse<T> extends Response {
     private Collection<T> data;
 
     public MultiResponse() {
     }
 
     public List<T> getData() {
-        return (List)(null == this.data ? Collections.emptyList() : new ArrayList(this.data));
+        return null == this.data ? Collections.emptyList() : new ArrayList(this.data);
     }
 
     public void setData(Collection<T> data) {

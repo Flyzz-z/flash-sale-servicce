@@ -22,7 +22,7 @@ public class RedissonConfig {
     @Bean
     public RedissonClient getRedissonClient() {
         Config config = new Config();
-        config.useSingleServer().setAddress("redis://"+redissonHost+redissonPort);
+        config.useSingleServer().setAddress("redis://" + redissonHost + ":" + redissonPort);
         return Redisson.create(config);
     }
 }

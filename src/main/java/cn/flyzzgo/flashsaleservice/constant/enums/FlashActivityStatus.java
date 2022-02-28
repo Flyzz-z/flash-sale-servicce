@@ -2,14 +2,14 @@ package cn.flyzzgo.flashsaleservice.constant.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 /**
  * @author Flyzz
  */
 @Getter
 @AllArgsConstructor
-public enum FlashItemStatus {
+public enum FlashActivityStatus {
+
     PUBLISHED(0, "已发布"),
     ONLINE(1, "已上线"),
     OFFLINE(-1, "已下线");

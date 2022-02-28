@@ -8,9 +8,9 @@ import lombok.ToString;
  * @author Flyzz
  */
 @Getter
-public class BizException extends RuntimeException{
+public class BizException extends RuntimeException {
 
-    private String errCode;
+    private final String errCode;
 
     public BizException(String msg) {
         super(msg);

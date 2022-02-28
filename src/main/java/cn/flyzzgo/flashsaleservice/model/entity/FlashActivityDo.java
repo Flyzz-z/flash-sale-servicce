@@ -18,7 +18,7 @@ public class FlashActivityDo {
     /**
      * 活动ID
      */
-    @TableId(value = "id",type = IdType.AUTO)
+    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     /**

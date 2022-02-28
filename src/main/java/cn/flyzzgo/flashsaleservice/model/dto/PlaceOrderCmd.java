@@ -32,4 +32,8 @@ public class PlaceOrderCmd {
      * 总金额
      */
     private Long totalAmount;
+
+    public boolean checkValid() {
+        return itemId != null && activityId != null && quantity != null && quantity > 0;
+    }
 }

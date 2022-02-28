@@ -1,6 +1,7 @@
 package cn.flyzzgo.flashsaleservice.model.dto;
 
 import lombok.Data;
+import org.springframework.util.StringUtils;
 
 import java.util.Date;
 
@@ -63,4 +64,10 @@ public class FlashItemDto {
      */
     private Integer stockWarmUp;
 
+    public boolean checkValid() {
+        return activityId == null || !StringUtils.hasText(itemTitle) || !StringUtils.hasText(itemSubTitle)
+                || !StringUtils.hasText(itemDesc) || initialStock == null || availableStock == null
+                || originalPrice == null || originalPrice <= 0 || flashPrice == null || flashPrice <= 0
+                || startTime == null || endTime == null;
+    }
 }
