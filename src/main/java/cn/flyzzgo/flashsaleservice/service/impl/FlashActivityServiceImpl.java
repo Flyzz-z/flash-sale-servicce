@@ -49,7 +49,7 @@ public class FlashActivityServiceImpl implements FlashActivityService {
     }
 
     @Override
-    @Cacheable(key = "'FlashActivityCache'.concat(#activityId)")
+    @Cacheable(key = "'FlashActivityCache'.concat(#activityId)",sync = true)
     public Response getFlashActivityById(Long activityId) {
         log.info("查询秒杀活动 id={}", activityId);
         FlashActivityDo flashActivityDo = flashActivityMapper.selectById(activityId);

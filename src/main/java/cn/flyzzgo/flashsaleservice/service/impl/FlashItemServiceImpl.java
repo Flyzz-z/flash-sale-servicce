@@ -98,7 +98,7 @@ public class FlashItemServiceImpl implements FlashItemService {
     }
 
     @Override
-    @Cacheable(key = "'ActivityFlashItemCache'.concat(#activityId)")
+    @Cacheable(key = "'ActivityFlashItemCache'.concat(#activityId)",sync = true)
     public Response getFlashItemsByActivityId(Long activityId) {
 
         QueryWrapper<FlashItemDo> queryWrapper = new QueryWrapper<>();
