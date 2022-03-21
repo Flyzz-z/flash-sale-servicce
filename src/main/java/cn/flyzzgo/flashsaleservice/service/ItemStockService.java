@@ -9,7 +9,7 @@ public interface ItemStockService {
 
     DecreaseItemStockResult decreaseItemStock(Long itemId, Integer num);
 
-    boolean increaseItemStock(Long itemId,Integer num);
+    boolean increaseItemStock(Long itemId, Integer num);
 
     boolean initItemStock(Long itemId);
 }

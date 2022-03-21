@@ -49,7 +49,7 @@ public class FlashActivityServiceImpl implements FlashActivityService {
     }
 
     @Override
-    @Cacheable(key = "'FlashActivityCache'.concat(#activityId)",sync = true)
+    @Cacheable(key = "'FlashActivityCache'.concat(#activityId)", sync = true)
     public Response getFlashActivityById(Long activityId) {
         log.info("查询秒杀活动 id={}", activityId);
         FlashActivityDo flashActivityDo = flashActivityMapper.selectById(activityId);
@@ -63,40 +63,40 @@ public class FlashActivityServiceImpl implements FlashActivityService {
     @Override
     @CacheEvict(key = "'FlashActivityCache'.concat(#activityId)")
     public Response onlineFlashActivity(Long activityId) {
-        log.info("上线活动id{}",activityId);
+        log.info("上线活动id{}", activityId);
         FlashActivityDo flashActivityDo = flashActivityMapper.selectById(activityId);
-        if(flashActivityDo == null) {
+        if (flashActivityDo == null) {
             return Response.buildFailure(ErrorCode.CLIENT_ERROR);
         }
 
-        if(flashActivityDo.getStatus().equals(FlashActivityStatus.ONLINE.getCode())) {
-            log.info("无需重复上线{}",activityId);
+        if (flashActivityDo.getStatus().equals(FlashActivityStatus.ONLINE.getCode())) {
+            log.info("无需重复上线{}", activityId);
             return Response.buildSuccess();
         }
 
         flashActivityDo.setStatus(FlashActivityStatus.ONLINE.getCode());
         flashActivityMapper.updateById(flashActivityDo);
-        log.info("上线成功id{}",activityId);
+        log.info("上线成功id{}", activityId);
         return Response.buildSuccess();
     }
 
     @Override
     @CacheEvict(key = "'FlashActivityCache'.concat(#activityId)")
     public Response offlineFlashActivity(Long activityId) {
-        log.info("下线活动id{}",activityId);
+        log.info("下线活动id{}", activityId);
         FlashActivityDo flashActivityDo = flashActivityMapper.selectById(activityId);
-        if(flashActivityDo == null) {
+        if (flashActivityDo == null) {
             return Response.buildFailure(ErrorCode.CLIENT_ERROR);
         }
 
-        if(!flashActivityDo.getStatus().equals(FlashActivityStatus.ONLINE.getCode())) {
-            log.info("下线活动id{}失败，活动未上线",activityId);
+        if (!flashActivityDo.getStatus().equals(FlashActivityStatus.ONLINE.getCode())) {
+            log.info("下线活动id{}失败，活动未上线", activityId);
             return Response.buildFailure(ErrorCode.CLIENT_ERROR);
         }
 
         flashActivityDo.setStatus(FlashActivityStatus.OFFLINE.getCode());
         flashActivityMapper.updateById(flashActivityDo);
-        log.info("下线成功id{}",activityId);
+        log.info("下线成功id{}", activityId);
         return Response.buildSuccess();
     }
 

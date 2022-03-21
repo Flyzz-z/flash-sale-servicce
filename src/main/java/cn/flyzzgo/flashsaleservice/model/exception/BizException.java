@@ -2,7 +2,6 @@ package cn.flyzzgo.flashsaleservice.model.exception;
 
 import cn.flyzzgo.flashsaleservice.constant.enums.ErrorCode;
 import lombok.Getter;
-import lombok.ToString;
 
 /**
  * @author Flyzz

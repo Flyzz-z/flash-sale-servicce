@@ -19,7 +19,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = BizException.class)
     public Response bizExceptionHandler(HttpServletRequest httpServletRequest, BizException e) {
         log.info(e.getErrCode() + e.getMessage());
-        return Response.buildFailure(e.getErrCode(),e.getMessage());
+        return Response.buildFailure(e.getErrCode(), e.getMessage());
     }
 
     @ExceptionHandler(value = Exception.class)

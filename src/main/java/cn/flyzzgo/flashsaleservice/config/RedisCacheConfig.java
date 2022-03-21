@@ -8,8 +8,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.cache.interceptor.KeyGenerator;
-import org.springframework.cache.jcache.config.ProxyJCacheConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
@@ -21,10 +19,11 @@ import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
-import java.lang.reflect.Method;
 import java.time.Duration;
-import java.util.Arrays;
-import java.util.stream.Collectors;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Flyzz
@@ -48,23 +47,33 @@ public class RedisCacheConfig {
 
         jackson2JsonRedisSerializer.setObjectMapper(om);
 
+
         // 配置序列化（解决乱码的问题）
         RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig()
-                .entryTtl(Duration.ofDays(1))
                 .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(redisSerializer))
                 .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(jackson2JsonRedisSerializer))
                 .disableCachingNullValues();
 
+        Set<String> cacheNames = new HashSet<>();
+        cacheNames.add("FlashActivity");
+        cacheNames.add("FlashItem");
+
+        Map<String, RedisCacheConfiguration> configMap = new ConcurrentHashMap<>();
+        configMap.put("FlashActivity", config.entryTtl(Duration.ofSeconds(60)));
+        configMap.put("FlashItem", config.entryTtl(Duration.ofMillis(3)));
+
         return RedisCacheManager.builder(factory)
                 .cacheDefaults(config)
+                .initialCacheNames(cacheNames)
+                .withInitialCacheConfigurations(configMap)
                 .build();
     }
 
 
     @Bean
-    public RedisTemplate<String,Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
+    public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
 
-        RedisTemplate<String,Object> redisTemplate = new RedisTemplate<>();
+        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(redisConnectionFactory);
 
         Jackson2JsonRedisSerializer jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer(Object.class);

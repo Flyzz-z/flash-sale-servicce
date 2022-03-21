@@ -92,7 +92,7 @@ public class FlashOrderServiceImpl implements FlashOrderService {
             preDecreaseStockSuccess = itemStockService.decreaseItemStock(flashItemDto.getId(), placeOrderCmd.getQuantity());
             if (preDecreaseStockSuccess.equals(DecreaseItemStockResult.NOT_ENOUGH_STOCK)) {
                 return Response.buildFailure(ErrorCode.NOT_ENOUGH_STOCK);
-            } else if(preDecreaseStockSuccess.equals(DecreaseItemStockResult.DECREASE_ERROR)) {
+            } else if (preDecreaseStockSuccess.equals(DecreaseItemStockResult.DECREASE_ERROR)) {
                 return Response.buildFailure(ErrorCode.SERVER_ERROR);
             }
 
@@ -108,10 +108,10 @@ public class FlashOrderServiceImpl implements FlashOrderService {
 
         } catch (Exception e) {
             e.printStackTrace();
-            if(preDecreaseStockSuccess.equals(DecreaseItemStockResult.DECREASE_SUCCESS)) {
-                boolean recoverStockSuccess = itemStockService.increaseItemStock(flashOrderDto.getItemId(),flashOrderDto.getQuantity());
-                if(!recoverStockSuccess) {
-                    log.info("恢复预扣库存失败:{}",flashOrderDto);
+            if (preDecreaseStockSuccess.equals(DecreaseItemStockResult.DECREASE_SUCCESS)) {
+                boolean recoverStockSuccess = itemStockService.increaseItemStock(flashOrderDto.getItemId(), flashOrderDto.getQuantity());
+                if (!recoverStockSuccess) {
+                    log.info("恢复预扣库存失败:{}", flashOrderDto);
                 }
             }
             throw new BizException(ErrorCode.CLIENT_ERROR);
@@ -125,13 +125,13 @@ public class FlashOrderServiceImpl implements FlashOrderService {
     @Override
     public Response cancelOrder(Long orderId) {
         FlashOrderDo flashOrderDo = flashOrderMapper.selectById(orderId);
-        boolean recoverItemStockSuccess = flashItemService.increaseItemStock(flashOrderDo.getItemId(),flashOrderDo.getQuantity());
-        if(!recoverItemStockSuccess) {
+        boolean recoverItemStockSuccess = flashItemService.increaseItemStock(flashOrderDo.getItemId(), flashOrderDo.getQuantity());
+        if (!recoverItemStockSuccess) {
             return Response.buildFailure(ErrorCode.SERVER_ERROR);
         }
 
-        boolean recoverItemStockCacheSuccess = itemStockService.increaseItemStock(flashOrderDo.getItemId(),flashOrderDo.getQuantity());
-        if(!recoverItemStockCacheSuccess) {
+        boolean recoverItemStockCacheSuccess = itemStockService.increaseItemStock(flashOrderDo.getItemId(), flashOrderDo.getQuantity());
+        if (!recoverItemStockCacheSuccess) {
             return Response.buildFailure(ErrorCode.SERVER_ERROR);
         }
         return Response.buildSuccess();

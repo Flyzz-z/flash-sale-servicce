@@ -1,7 +1,6 @@
 package cn.flyzzgo.flashsaleservice.model.convertor;
 
 import cn.flyzzgo.flashsaleservice.model.dto.FlashOrderDto;
-import cn.flyzzgo.flashsaleservice.model.entity.FlashItemDo;
 import cn.flyzzgo.flashsaleservice.model.entity.FlashOrderDo;
 import org.springframework.beans.BeanUtils;
 

@@ -11,12 +11,7 @@ import cn.flyzzgo.flashsaleservice.model.response.Response;
 import cn.flyzzgo.flashsaleservice.model.response.SingleResponse;
 import cn.flyzzgo.flashsaleservice.service.FlashItemService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
-import org.redisson.api.RLock;
-import org.redisson.api.RedissonClient;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -24,7 +19,6 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -98,7 +92,7 @@ public class FlashItemServiceImpl implements FlashItemService {
     }
 
     @Override
-    @Cacheable(key = "'ActivityFlashItemCache'.concat(#activityId)",sync = true)
+    @Cacheable(key = "'ActivityFlashItemCache'.concat(#activityId)", sync = true)
     public Response getFlashItemsByActivityId(Long activityId) {
 
         QueryWrapper<FlashItemDo> queryWrapper = new QueryWrapper<>();
@@ -120,7 +114,7 @@ public class FlashItemServiceImpl implements FlashItemService {
     public Response getNotWarmUpItemList(Long size) {
         QueryWrapper<FlashItemDo> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda().eq(FlashItemDo::getStockWarmUp, 0)
-                .eq(FlashItemDo::getStatus,FlashItemStatus.ONLINE.getCode())
+                .eq(FlashItemDo::getStatus, FlashItemStatus.ONLINE.getCode())
                 .last(String.format("limit %d", size));
         List<FlashItemDo> flashItemDoList = flashItemMapper.selectList(queryWrapper);
         List<FlashItemDto> flashItemDtoList = flashItemDoList.stream().map(FlashItemConvertor::flashItemDoToDto).collect(Collectors.toList());

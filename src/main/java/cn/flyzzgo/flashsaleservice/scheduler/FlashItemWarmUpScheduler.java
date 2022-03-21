@@ -1,7 +1,6 @@
 package cn.flyzzgo.flashsaleservice.scheduler;
 
 import cn.flyzzgo.flashsaleservice.model.dto.FlashItemDto;
-import cn.flyzzgo.flashsaleservice.model.entity.FlashItemDo;
 import cn.flyzzgo.flashsaleservice.model.response.Response;
 import cn.flyzzgo.flashsaleservice.model.response.SingleResponse;
 import cn.flyzzgo.flashsaleservice.service.FlashItemService;
@@ -28,16 +27,16 @@ public class FlashItemWarmUpScheduler {
     @Scheduled(cron = "*/5 * * * * ?")
     public void warmUpFlashItemTask() {
         Response response = flashItemService.getNotWarmUpItemList(30L);
-        if(!response.isSuccess()) {
+        if (!response.isSuccess()) {
             return;
         }
 
-        List<FlashItemDto> flashItemDoList = (List<FlashItemDto>) ((SingleResponse)response).getData();
-        if(CollectionUtils.isEmpty(flashItemDoList)) {
+        List<FlashItemDto> flashItemDoList = (List<FlashItemDto>) ((SingleResponse) response).getData();
+        if (CollectionUtils.isEmpty(flashItemDoList)) {
             return;
         }
 
-        flashItemDoList.forEach(item ->{
+        flashItemDoList.forEach(item -> {
             itemStockService.initItemStock(item.getId());
         });
     }

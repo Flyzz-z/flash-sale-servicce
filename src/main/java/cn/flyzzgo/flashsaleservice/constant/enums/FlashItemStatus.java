@@ -2,7 +2,6 @@ package cn.flyzzgo.flashsaleservice.constant.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 /**
  * @author Flyzz

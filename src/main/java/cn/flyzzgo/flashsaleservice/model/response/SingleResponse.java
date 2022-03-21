@@ -1,7 +1,5 @@
 package cn.flyzzgo.flashsaleservice.model.response;
 
-import lombok.Data;
-
 /**
  * @author Flyzz
  */

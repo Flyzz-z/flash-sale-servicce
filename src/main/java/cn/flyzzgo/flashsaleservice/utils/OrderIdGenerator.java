@@ -1,7 +1,5 @@
 package cn.flyzzgo.flashsaleservice.utils;
 
-import org.springframework.stereotype.Component;
-
 import java.util.Random;
 
 /**
@@ -9,9 +7,9 @@ import java.util.Random;
  */
 public class OrderIdGenerator {
 
-   private static final SnowflakeIdWorker snowflakeIdWorker = new SnowflakeIdWorker(new Random().nextInt(32),1,1);
+    private static final SnowflakeIdWorker snowflakeIdWorker = new SnowflakeIdWorker(new Random().nextInt(32), 1, 1);
 
-   public static Long nextOrderId() {
-      return snowflakeIdWorker.nextId();
-   }
+    public static Long nextOrderId() {
+        return snowflakeIdWorker.nextId();
+    }
 }

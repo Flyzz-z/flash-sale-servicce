@@ -25,9 +25,9 @@ public class FlashOrderController {
     public Response placeOrder(@RequestBody PlaceOrderCmd placeOrderCmd) throws InterruptedException {
 
         // TODO: 2022/2/26 鉴权
-        if(!placeOrderCmd.checkValid()) {
+        if (!placeOrderCmd.checkValid()) {
             return Response.buildFailure(ErrorCode.PARAM_ERROR);
         }
-        return flashOrderService.placeOrder(1L,placeOrderCmd);
+        return flashOrderService.placeOrder(1L, placeOrderCmd);
     }
 }

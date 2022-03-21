@@ -6,20 +6,17 @@ import cn.flyzzgo.flashsaleservice.model.response.Response;
 import cn.flyzzgo.flashsaleservice.model.response.SingleResponse;
 import cn.flyzzgo.flashsaleservice.service.FlashItemService;
 import cn.flyzzgo.flashsaleservice.service.ItemStockService;
-import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
-import org.springframework.data.redis.core.script.RedisScript;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author Flyzz
@@ -81,10 +78,10 @@ public class ItemStockServiceImpl implements ItemStockService {
         List<String> keys = new ArrayList<>();
         keys.add(ITEM_Stock_PREFIX + itemId);
         Long res = redisTemplate.execute(redisScript, keys, num);
-        if (res == null || res==-1 || res==-2) {
+        if (res == null || res == -1 || res == -2) {
             return DecreaseItemStockResult.DECREASE_ERROR;
         }
-        if(res==-3) {
+        if (res == -3) {
             return DecreaseItemStockResult.NOT_ENOUGH_STOCK;
         }
         return DecreaseItemStockResult.DECREASE_SUCCESS;
@@ -143,7 +140,7 @@ public class ItemStockServiceImpl implements ItemStockService {
                 log.info("initItemStock秒杀品库存初始化失败,id{}", itemId);
                 return false;
             }
-            if(result!=1) {
+            if (result != 1) {
                 return false;
             }
             flashItemDto.setStockWarmUp(1);
