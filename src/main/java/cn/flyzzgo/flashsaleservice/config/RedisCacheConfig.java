@@ -59,8 +59,8 @@ public class RedisCacheConfig {
         cacheNames.add("FlashItem");
 
         Map<String, RedisCacheConfiguration> configMap = new ConcurrentHashMap<>();
-        configMap.put("FlashActivity", config.entryTtl(Duration.ofSeconds(60)));
-        configMap.put("FlashItem", config.entryTtl(Duration.ofMillis(3)));
+        configMap.put("FlashActivity", config.entryTtl(Duration.ofMinutes(60)));
+        configMap.put("FlashItem", config.entryTtl(Duration.ofSeconds(3)));
 
         return RedisCacheManager.builder(factory)
                 .cacheDefaults(config)
