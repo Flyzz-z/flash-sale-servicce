@@ -133,8 +133,7 @@ public class ItemStockServiceImpl implements ItemStockService {
             }
 
             DefaultRedisScript<Long> redisScript = new DefaultRedisScript<>(INIT_ITEM_STOCK_LUA, Long.class);
-            List<String> keys = new ArrayList<>();
-            keys.add(ITEM_Stock_PREFIX + itemId);
+            List<String> keys = Collections.singletonList(ITEM_Stock_PREFIX + itemId);
             Long result = redisTemplate.execute(redisScript, keys, flashItemDto.getAvailableStock());
             if (result == null) {
                 log.info("initItemStock秒杀品库存初始化失败,id{}", itemId);
@@ -153,4 +152,6 @@ public class ItemStockServiceImpl implements ItemStockService {
             rLock.unlock();
         }
     }
+
+
 }

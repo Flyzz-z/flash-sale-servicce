@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.Random;
 
 /**
  * @author Flyzz
@@ -28,6 +29,6 @@ public class FlashOrderController {
         if (!placeOrderCmd.checkValid()) {
             return Response.buildFailure(ErrorCode.PARAM_ERROR);
         }
-        return flashOrderService.placeOrder(1L, placeOrderCmd);
+        return flashOrderService.placeOrder(new Random().nextLong(), placeOrderCmd);
     }
 }

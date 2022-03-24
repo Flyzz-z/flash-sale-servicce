@@ -10,4 +10,5 @@ class FlashSaleServiceApplicationTests {
     void contextLoads() {
     }
 
+
 }
