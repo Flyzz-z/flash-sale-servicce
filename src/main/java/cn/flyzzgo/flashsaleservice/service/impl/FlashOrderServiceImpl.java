@@ -19,6 +19,7 @@ import cn.flyzzgo.flashsaleservice.utils.OrderIdGenerator;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +31,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Service
 @Slf4j
+@ConditionalOnProperty(name="flash.order.type",havingValue = "sync",matchIfMissing = true)
 public class FlashOrderServiceImpl implements FlashOrderService {
 
     private final String PLACE_ORDER_USER_LOCK_KEY = "flash-sale-service.placeOrderUserLockKey";

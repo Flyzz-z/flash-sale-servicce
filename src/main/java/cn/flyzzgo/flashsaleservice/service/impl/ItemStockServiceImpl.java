@@ -37,7 +37,7 @@ public class ItemStockServiceImpl implements ItemStockService {
                 "   return -1;" +
                 "end;" +
                 "local stockNumber = tonumber(ARGV[1]);" +
-                "redis.call('set', KEYS[1] , stockNumber);" +
+                "redis.call('setEx', KEYS[1] , stockNumber);" +
                 "return 1";
 
         DECREASE_ITEM_STOCK_LUA = "if (redis.call('exists', KEYS[1]) == 1) then" +
