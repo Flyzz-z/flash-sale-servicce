@@ -14,8 +14,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
@@ -25,8 +26,9 @@ import java.util.concurrent.TimeUnit;
 /**
  * @author Flyzz
  */
-@Component
+@Service
 @Slf4j
+@ConditionalOnProperty(name="flash.order.type",havingValue = "async")
 public class FlashOrderTaskListenerServiceImpl implements FlashOrderTaskListenerService {
 
     @Resource
