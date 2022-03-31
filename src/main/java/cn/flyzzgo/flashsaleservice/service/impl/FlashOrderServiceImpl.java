@@ -56,7 +56,7 @@ public class FlashOrderServiceImpl implements FlashOrderService {
     @Transactional(rollbackFor = Exception.class)
     public Response placeOrder(Long userId, PlaceOrderCmd placeOrderCmd) {
 
-        RLock placeOrderUserLock = redissonClient.getLock(PLACE_ORDER_USER_LOCK_KEY + userId);
+        RLock placeOrderUserLock = redissonClient.getLock(PLACE_ORDER_USER_LOCK_KEY + userId +" " + placeOrderCmd.getItemId());
         Long orderId;
         DecreaseItemStockResult preDecreaseStockSuccess = DecreaseItemStockResult.DECREASE_ERROR;
         FlashOrderDto flashOrderDto = new FlashOrderDto();

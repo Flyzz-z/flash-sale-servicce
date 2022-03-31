@@ -42,8 +42,8 @@ public class FlashOrderTaskServiceImpl implements FlashOrderTaskService {
             messageProperties.setContentType("application/json");
             messageProperties.setDeliveryMode(MessageDeliveryMode.PERSISTENT);
             messageProperties.setDeliveryTag(placeOrderTask.getTaskId());
+            messageProperties.setExpiration("70000");
             Message message = rabbitTemplate.getMessageConverter().toMessage(placeOrderTask,messageProperties);
-
             CorrelationData correlationData = new CorrelationData();
             rabbitTemplate.convertAndSend("flashOrderTask.exchange", "order.task", message, correlationData);
             CorrelationData.Confirm confirm = correlationData.getFuture().get(5, TimeUnit.SECONDS);

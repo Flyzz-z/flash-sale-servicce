@@ -33,6 +33,7 @@ public class RabbitMqConfig {
         executor.afterPropertiesSet();
         container.setTaskExecutor(executor);
         container.setConnectionFactory(connectionFactory());
+        container.setPrefetchCount(200);
         return container;
     }
 
